@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Xcode — build / user data
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager (se conserva Package.resolved compartido para builds reproducibles)
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+.build/
+
+# No incluir en el repo público del TFM
+Documentacion-TFM-2.pdf
+mathLocalRepo/
