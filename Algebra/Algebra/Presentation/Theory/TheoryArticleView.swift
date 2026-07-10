@@ -84,6 +84,10 @@ struct TheoryArticleView: View {
                     }
                 }
             }
+        case .ruffini(_, let tableau):
+            RuffiniTableView(tableau: tableau)
+                .fitToWidth()
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

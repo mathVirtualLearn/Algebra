@@ -117,4 +117,70 @@ struct FractionTests {
         #expect(latex.hasPrefix("-"))
         #expect(latex.contains("\\displaystyle\\frac{19}{64}"))
     }
+
+    @Test
+    func test_givenPositiveInteger_whenParsing_thenMatchesInteger() async throws {
+        #expect(Fraction(parsing: "2") == Fraction(2))
+    }
+
+    @Test
+    func test_givenNegativeInteger_whenParsing_thenMatchesInteger() async throws {
+        #expect(Fraction(parsing: "-2") == Fraction(-2))
+    }
+
+    @Test
+    func test_givenPositiveFraction_whenParsing_thenMatchesFraction() async throws {
+        #expect(Fraction(parsing: "3/2") == Fraction(3, 2))
+    }
+
+    @Test
+    func test_givenNegativeFraction_whenParsing_thenMatchesFraction() async throws {
+        #expect(Fraction(parsing: "-3/2") == Fraction(-3, 2))
+    }
+
+    @Test
+    func test_givenSurroundingWhitespace_whenParsing_thenParsedIgnoringSpaces() async throws {
+        #expect(Fraction(parsing: "  3 / 2 ") == Fraction(3, 2))
+    }
+
+    @Test
+    func test_givenEmptyString_whenParsing_thenNil() async throws {
+        #expect(Fraction(parsing: "") == nil)
+    }
+
+    @Test
+    func test_givenDecimalString_whenParsing_thenNil() async throws {
+        #expect(Fraction(parsing: "1.5") == nil)
+    }
+
+    @Test
+    func test_givenNonNumericString_whenParsing_thenNil() async throws {
+        #expect(Fraction(parsing: "x") == nil)
+    }
+
+    @Test
+    func test_givenZeroDenominatorString_whenParsing_thenNil() async throws {
+        #expect(Fraction(parsing: "3/0") == nil)
+    }
+
+    @Test
+    func test_givenTooManyParts_whenParsing_thenNil() async throws {
+        #expect(Fraction(parsing: "1/2/3") == nil)
+    }
+
+    @Test
+    func test_givenEquivalentFractions_whenCompared_thenEqual() async throws {
+        #expect(Fraction(2, 4) == Fraction(1, 2))
+    }
+
+    @Test
+    func test_givenEquivalentFractions_whenHashed_thenSameHashValue() async throws {
+        #expect(Fraction(2, 4).hashValue == Fraction(1, 2).hashValue)
+    }
+
+    @Test
+    func test_givenEquivalentFractions_whenInsertedInSet_thenDeduplicated() async throws {
+        let set: Set<Fraction> = [Fraction(2, 4), Fraction(1, 2), Fraction(3, 6)]
+        #expect(set == [Fraction(1, 2)])
+    }
 }

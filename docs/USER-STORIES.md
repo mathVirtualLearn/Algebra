@@ -136,6 +136,10 @@ pestañas **para** moverme con rapidez entre las secciones de la app.
 - **US-014** · Funciones con entrada de texto libre (parser de expresiones: `2cos(3x)`, `x^2+3x`…) (✅)
 - **US-015** · Teoría (sustituye a Fórmulas): 8 artículos (ecuaciones, Ruffini, sistemas, Cramer, Gauss) (✅)
 - **US-016** · Ajustes con preferencias (tamaño de fórmulas + mostrar pasos) y pestaña «Aprende» (✅)
+- **US-017** · Práctica: ejercicios generados con solución garantizada + autocorrección (✅)
+- **US-018** · Generar hoja de ejercicios en PDF imprimible (10 ejercicios + soluciones + vista previa) (✅)
+- **US-019** · Generación variada: coeficiente líder variable, soluciones fraccionarias y raíces dobles (✅)
+- **US-020** · Caja de Ruffini en Teoría (bloque visual en el artículo del método) (✅)
 
 ### US-008 · Selector de método en Sistemas
 **Estado**: ✅ Hecha
@@ -186,10 +190,68 @@ primera pestaña tenga un nombre con sentido, **para** adaptar la app a cómo es
 
 **Implementación** (orquestando `algebra-logic` → `algebra-ui`): `Domain/{Preferences, FormulaSize, PreferencesRepository}` · `Data/UserDefaultsPreferencesRepository` · `Core/Preferences/PreferencesStore` (`@MainActor @Observable`) · `Core/DesignSystem/FormulaEnvironment` (`\.formulaScale`/`\.showDetailedSteps` vía `@Entry`) · `MathView` multiplica por `formulaScale` · `RootView` crea el store e inyecta el Environment · `SettingsView`/`SettingsViewModel`. Ver DECISIONS · ADR-007. Tests: `UserDefaultsPreferencesRepositoryTests`, `SettingsViewModelTests`.
 
+### US-017 · Práctica con autocorrección
+**Estado**: ✅ Hecha
+**Como** estudiante **quiero** que la app me proponga ejercicios y me corrija la respuesta **para** practicar
+por mi cuenta y saber al momento si lo he hecho bien.
+
+**Criterios de aceptación**
+- ✅ Puedo elegir el tipo de ejercicio (ecuaciones de Grado 1–4, bicuadrada, sistema 2×2 y 3×3) con chips.
+- ✅ Cada ejercicio se genera con **solución garantizada** (se construye desde la solución), no por azar de coeficientes.
+- ✅ Escribo la respuesta (raíces separadas por comas; para sistemas, un campo por incógnita) y al pulsar **Comprobar** veo si es correcta (verde) o no (rojo).
+- ✅ En ecuaciones el orden de las raíces no importa; la comprobación es exacta (compara `Fraction`, admite fracciones «3/2»).
+- ✅ **Ver solución** muestra el procedimiento paso a paso y la solución destacada, reutilizando los solvers y mappers existentes.
+- ✅ **Otro ejercicio** genera uno nuevo del mismo tipo y limpia el estado.
+
+**Notas**: la generación garantizada y el `RandomSource` inyectable se detallan en DECISIONS · ADR-009.
+**Implementación**: `Presentation/Practice/{PracticeView, PracticeViewModel}` · `Core/DI/PracticeFactory` · casos de uso `GenerateEquationExerciseUseCase` + `GenerateSystemExerciseUseCase` + `CheckEquationAnswerUseCase`/`CheckSystemAnswerUseCase` (`Domain/UseCases/CheckAnswerUseCase.swift`) · `Domain/Services/RandomSource` + `Core/Random/SystemRandomSource` · entidad `PracticeExercise` (`PracticeType`, `EquationExercise{input, roots:[Fraction]}`, `SystemExercise{input, solution:[Fraction]}`) · reutiliza `SolveEquationUseCase`/`SolveSystemUseCase`, `EquationUIMapper`/`SystemUIMapper` y `StepListView` · card «Práctica» en Aprende (seed de temas). Ver `COMPONENTS.md`.
+
+### US-018 · Generar hoja de ejercicios en PDF imprimible
+**Estado**: ✅ Hecha
+**Como** profesor (o estudiante) **quiero** generar una hoja de ejercicios en PDF con su hoja de soluciones **para**
+imprimirla o compartirla y trabajar sin pantalla.
+
+**Criterios de aceptación**
+- ✅ Elijo el tipo (ecuaciones de Grado 1–4, bicuadrada, sistema 2×2/3×3) y genero **10 ejercicios** de ese tipo.
+- ✅ El PDF (A4) incluye título, línea de nombre/fecha, los enunciados numerados y una **página de soluciones** al final.
+- ✅ Las fórmulas van **rasterizadas** (imagen) con SwiftMath, no como texto plano.
+- ✅ **Vista previa in-app** con PDFKit antes de compartir/imprimir; puedo cerrarla o compartir con `ShareLink`.
+- ✅ Reutiliza los generadores garantizados y los mappers de Ecuaciones/Sistemas para enunciado y solución.
+
+**Notas**: exportación a PDF y previsualización en DECISIONS · ADR-010.
+**Implementación**: `Presentation/Worksheet/{WorksheetView, WorksheetViewModel}` · `Core/DI/WorksheetFactory` · `Core/PDF/WorksheetPDFRenderer` (`WorksheetPDFRenderer` protocolo + `SwiftMathWorksheetPDFRenderer`, `@MainActor`, `UIGraphicsPDFRenderer`, A4, fórmulas con `MTMathImage`) + `Core/PDF/WorksheetItem` · `Presentation/Shared/{PDFKitView, ShareSheet}` · card «Generar ejercicios» (hoja PDF) en Aprende (seed de temas). Ver `COMPONENTS.md`.
+
+### US-019 · Generación variada (coef. líder, fracciones, raíces dobles)
+**Estado**: ✅ Hecha
+**Como** estudiante **quiero** que los ejercicios generados no sean siempre mónicos ni de solución entera **para**
+practicar casos más realistas y variados.
+
+**Criterios de aceptación**
+- ✅ El **coeficiente líder varía** (no siempre 1) en polinomios y bicuadradas.
+- ✅ Aparecen **soluciones fraccionarias** (~30 % en 1.º/2.º grado y, a veces, en sistemas por Cramer con término independiente libre).
+- ✅ Aparecen **raíces dobles** ocasionales en 2.º/3.º/4.º grado.
+- ✅ `Fraction` gana `Hashable` e `init?(parsing:)` (acepta «3/2»); las raíces de ecuaciones se muestran como **fracción** exacta (no decimal) en el mapper.
+- ✅ Los coeficientes se acotan (tope) para que los enunciados sean legibles.
+
+**Notas**: la construcción desde la solución (que garantiza estas variantes limpias) está en DECISIONS · ADR-009.
+**Implementación**: `GenerateEquationExerciseUseCase` (expande factores con líder `a`, raíces fraccionarias/dobles, `build` con tope de coeficientes) · `GenerateSystemExerciseUseCase` (matriz con det≠0 y término independiente libre → solución fraccionaria por Cramer, o solución entera exacta) · `Fraction` (`Hashable`, `init?(parsing:)`) · `EquationUIMapper.rootLatex` muestra las raíces como fracción. Etiqueta: los grados se muestran como **«Grado N»** (antes «N.º grado») en Ecuaciones, Práctica y Generar hoja.
+
+### US-020 · Caja de Ruffini en Teoría
+**Estado**: ✅ Hecha
+**Como** estudiante **quiero** ver la caja visual de Ruffini dentro del artículo de teoría del método **para**
+entender la división sintética con el mismo dibujo que en el resolutor.
+
+**Criterios de aceptación**
+- ✅ El artículo «Método de Ruffini» muestra la **caja visual** (misma que en Ecuaciones), no solo texto y fórmulas sueltas.
+- ✅ Se reutiliza el componente `RuffiniTableView` (no se duplica).
+- ✅ El contenido de la caja llega desde el dominio como un bloque de teoría más.
+
+**Implementación**: nuevo caso `TheoryBlock.ruffini(header, root, products, results)` (Domain) → `TheoryBlockState.ruffini(id, RuffiniTableauState)` (primitivos) · `TheoryUIMapper` traduce el bloque a `RuffiniTableauState` · `TheoryArticleView` pinta el caso `.ruffini` con `RuffiniTableView` · seed del artículo de Ruffini actualizado. Ver `COMPONENTS.md`.
+
 ### Mantenimiento
 - **Crash de renderizado SwiftMath**: `assert` de tipografía ante el par «puntuación, operador» (coma pegada a `\pm`/`-`). Corregido en origen (Teoría, mapper de Ecuaciones usa `\quad` sin coma) y con red de seguridad `MathView.sanitized(_:)`. Ver DECISIONS · ADR-008.
 - **Paso 6 del workflow** (validación humana + adaptación) añadido a `AI-WORKFLOW.md` y a `CLAUDE.md`.
 - **Comentarios**: el código se dejó SIN comentarios a propósito (base limpia para aplicar reglas de comentado propias).
 
 ## Tests — ✅ Completos y en verde
-La deuda de tests queda **saldada**: el target `AlgebraTests` compila y `xcodebuild test` pasa (**0 fallos**, ~169 `@Test`). Cubierto: Funciones (parser/`FunctionExpr`/muestreo/VM/mapper), Sistemas y Ecuaciones (incl. Ruffini/`Fraction`), Identidades (`Monomial` + desarrollo simbólico), Teoría (use cases, mapper, VMs), Preferencias (`UserDefaultsPreferencesRepository`, `SettingsViewModel`). El bug que impedía compilar (`IdentityInputBuilder` pasaba `Double` en vez de `Monomial`) y dos mocks/tests con API vieja quedaron corregidos. No se detectaron bugs de producción.
+La deuda de tests queda **saldada**: el target `AlgebraTests` compila y `xcodebuild test` pasa (**0 fallos**, ~217 `@Test`). Cubierto: Funciones (parser/`FunctionExpr`/muestreo/VM/mapper), Sistemas y Ecuaciones (incl. Ruffini/`Fraction`), Identidades (`Monomial` + desarrollo simbólico), Teoría (use cases, mapper, VMs), Preferencias (`UserDefaultsPreferencesRepository`, `SettingsViewModel`). El bug que impedía compilar (`IdentityInputBuilder` pasaba `Double` en vez de `Monomial`) y dos mocks/tests con API vieja quedaron corregidos. No se detectaron bugs de producción.

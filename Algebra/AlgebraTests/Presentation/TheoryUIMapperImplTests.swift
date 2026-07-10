@@ -39,4 +39,35 @@ struct TheoryUIMapperImplTests {
         ])
         #expect(state.blocks.map(\.id) == [0, 1, 2, 3])
     }
+
+    @Test
+    func test_whenMapRuffiniBlock_thenBuildsSingleDivisionTableau() {
+        let article = TheoryArticle(
+            id: "r",
+            title: "Ruffini",
+            summary: "S",
+            blocks: [
+                .ruffini(
+                    header: ["1", "-6", "11", "-6"],
+                    root: "1",
+                    products: ["", "1", "-5", "6"],
+                    results: ["1", "-5", "6", "0"]
+                )
+            ]
+        )
+
+        let state = sut.mapArticle(article)
+
+        let expectedTableau = RuffiniTableauState(
+            header: ["1", "-6", "11", "-6"],
+            divisions: [
+                RuffiniTableauState.Division(
+                    root: "1",
+                    products: ["", "1", "-5", "6"],
+                    results: ["1", "-5", "6", "0"]
+                )
+            ]
+        )
+        #expect(state.blocks == [.ruffini(id: 0, expectedTableau)])
+    }
 }

@@ -9,7 +9,7 @@
 ## 1 · Portada
 - **Álgebra** — app iOS para estudiar álgebra de bachillerato
 - TFM · Máster de Desarrollo con IA · Alfonso Mariscal
-- *Desarrollada con IA (Claude Code)*
+- *Desarrollada con IA como copiloto*
 
 **[Notas]** Presento en una frase: una app nativa que resuelve y **explica** ejercicios de álgebra, hecha íntegramente con IA. Hoy cuento el qué y, sobre todo, el **cómo**.
 
@@ -49,8 +49,8 @@
 **[Notas]** Diagrama de capas. Domain es Swift puro y testeable; los repos van tras `protocol` (datos *swappable* sin tocar Domain). Esto es lo que hace el proyecto mantenible y probado.
 
 ## 7 · El proceso con IA (lo diferencial)
-- Desarrollo con **Claude Code** orquestando **agentes** con rol único: **lógica · UI · tests**
-- Contexto durable en el repo: `USER-STORIES`, `DECISIONS`, `COMPONENTS`, `AI-WORKFLOW`
+- Desarrollo con **IA** orquestando **agentes** con rol único: **lógica · UI · tests**
+- Contexto perdurable en el repo: `USER-STORIES`, `DECISIONS`, `COMPONENTS`, `AI-WORKFLOW`
 - SOLID aplicado también al **proceso**, no solo al código
 
 **[Notas]** No es "pedirle código a un chat". Es un pipeline: una historia de usuario → agente de lógica → agente de UI → agente de tests, con documentos vivos que evitan duplicados y dejan trazabilidad.
@@ -77,15 +77,14 @@
 **[Notas]** Cada decisión con trade-offs quedó registrada en `DECISIONS.md`. Muestro una o dos.
 
 ## 11 · Calidad y tests
-- **169 pruebas** con Swift Testing (Given-When-Then)
+- **217 pruebas** con Swift Testing (Given-When-Then)
 - Cubre solvers, parser, fracciones, sistemas, identidades, preferencias
-- **0 bugs de producción** al escribir la suite
 
 **[Notas]** La lógica crítica (Gauss, Cramer, Ruffini, parser) está verificada; los ViewModels con mocks.
 
 ## 12 · Aprendizajes
 - Orquestar IA con **roles y documentos** > un único prompt
-- La **validación humana** es insustituible (el crash lo probó)
+- La **validación humana** es insustituible
 - Clean Architecture facilitó testear y aislar la lógica
 
 **[Notas]** Qué me llevo del máster aplicado a este proyecto.

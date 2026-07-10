@@ -31,6 +31,18 @@ struct TheoryUIMapperImpl: TheoryUIMapper {
             return .formula(id: id, latex)
         case let .bullet(items):
             return .bullet(id: id, items)
+        case let .ruffini(header, root, products, results):
+            let tableau = RuffiniTableauState(
+                header: header,
+                divisions: [
+                    RuffiniTableauState.Division(
+                        root: root,
+                        products: products,
+                        results: results
+                    )
+                ]
+            )
+            return .ruffini(id: id, tableau)
         }
     }
 }

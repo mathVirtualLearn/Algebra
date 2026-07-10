@@ -79,7 +79,7 @@ struct EquationUIMapperImpl: EquationUIMapper {
                 text: "Como Δ > 0, hay dos soluciones reales. Aplicamos la fórmula general: la raíz del discriminante nos da las dos soluciones.",
                 latex: "x = \\displaystyle\\frac{-b \\pm \\sqrt{\\Delta}}{2a} \\Rightarrow \(rootsLatex(result.roots))"))
         } else if abs(discriminant) <= epsilon {
-            let value = result.roots.first.map(number) ?? ""
+            let value = result.roots.first.map(rootLatex) ?? ""
             steps.append(ExplanationStep(
                 text: "Como Δ = 0, la fórmula da una única solución real (raíz doble).",
                 latex: "x = \\displaystyle\\frac{-b}{2a} = \(value)"))
@@ -92,7 +92,7 @@ struct EquationUIMapperImpl: EquationUIMapper {
     }
 
     private func ruffiniSteps(_ result: EquationResult) -> [ExplanationStep] {
-        let foundRoots = result.ruffiniSteps.map { number($0.root) }
+        let foundRoots = result.ruffiniSteps.map { rootLatex($0.root) }
         let intro: String
         if foundRoots.isEmpty {
             intro = "Aplicamos Ruffini: probamos divisores del término independiente buscando raíces racionales."
@@ -114,7 +114,7 @@ struct EquationUIMapperImpl: EquationUIMapper {
             } else if quadratic.roots.count == 1 {
                 steps.append(ExplanationStep(
                     text: "La cuadrática tiene una raíz doble.",
-                    latex: "x = \(number(quadratic.roots[0]))"))
+                    latex: "x = \(rootLatex(quadratic.roots[0]))"))
             }
         }
         if result.outcome == .partial {
@@ -204,16 +204,16 @@ struct EquationUIMapperImpl: EquationUIMapper {
 
     private func rootsLatex(_ roots: [Double]) -> String {
         if roots.isEmpty { return "\\text{Sin soluciones reales}" }
-        if roots.count == 1 { return "x = \(number(roots[0]))" }
+        if roots.count == 1 { return "x = \(rootLatex(roots[0]))" }
         return roots.enumerated()
-            .map { "x_\($0.offset + 1) = \(number($0.element))" }
+            .map { "x_\($0.offset + 1) = \(rootLatex($0.element))" }
             .joined(separator: " \\quad ")
     }
 
     private func tRootsLatex(_ roots: [Double]) -> String {
-        if roots.count == 1 { return "t = \(number(roots[0]))" }
+        if roots.count == 1 { return "t = \(rootLatex(roots[0]))" }
         return roots.enumerated()
-            .map { "t_\($0.offset + 1) = \(number($0.element))" }
+            .map { "t_\($0.offset + 1) = \(rootLatex($0.element))" }
             .joined(separator: " \\quad ")
     }
 
@@ -294,6 +294,17 @@ struct EquationUIMapperImpl: EquationUIMapper {
             return String(Int(value))
         }
         return String(format: "%g", value)
+    }
+
+    // Imprime una raíz: entera tal cual, y no entera como fracción exacta en LaTeX inline.
+    private func rootLatex(_ value: Double) -> String {
+        if value == value.rounded(), abs(value) < 1e15 {
+            return number(value)
+        }
+        let fraction = Fraction(approximating: value)
+        if fraction.denominator == 1 { return number(Double(fraction.numerator)) }
+        let sign = fraction.numerator < 0 ? "-" : ""
+        return "\(sign)\\frac{\(abs(fraction.numerator))}{\(fraction.denominator)}"
     }
 
     private func subscriptDigits(_ n: Int) -> String {

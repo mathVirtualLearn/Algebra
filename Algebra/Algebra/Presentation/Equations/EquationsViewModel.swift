@@ -9,10 +9,10 @@ final class EquationsViewModel {
     var coefficients: [String] = Array(repeating: "", count: 5)
 
     let typeTitles: [String] = [
-        String(localized: "1.º grado"),
-        String(localized: "2.º grado"),
-        String(localized: "3.º grado"),
-        String(localized: "4.º grado"),
+        String(localized: "Grado 1"),
+        String(localized: "Grado 2"),
+        String(localized: "Grado 3"),
+        String(localized: "Grado 4"),
         String(localized: "Bicuadrada")
     ]
 

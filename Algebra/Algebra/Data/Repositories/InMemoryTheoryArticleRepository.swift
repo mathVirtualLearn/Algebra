@@ -132,6 +132,13 @@ struct InMemoryTheoryArticleRepository: TheoryRepository {
             .paragraph("El último número que obtienes es el resto de la división. Si r es raíz, ese resto vale 0. El resto de los números de la fila de resultados son los coeficientes del cociente, que tiene un grado menos que el polinomio inicial."),
             .heading("Ejemplo"),
             .paragraph("Dividimos x³ - 6x² + 11x - 6 entre (x - 1), es decir, con r = 1. Los coeficientes son 1, -6, 11 y -6. Al aplicar el método, la fila de resultados es 1, -5, 6 y un resto de 0:"),
+            .paragraph("Así queda la caja para el ejemplo:"),
+            .ruffini(
+                header: ["1", "-6", "11", "-6"],
+                root: "1",
+                products: ["", "1", "-5", "6"],
+                results: ["1", "-5", "6", "0"]
+            ),
             .formula("x^3 - 6x^2 + 11x - 6 = (x - 1)(x^2 - 5x + 6)"),
             .paragraph("El resto es 0, lo que confirma que x = 1 es raíz, y el cociente es la cuadrática x² - 5x + 6, que ya se resuelve con la fórmula general."),
         ]

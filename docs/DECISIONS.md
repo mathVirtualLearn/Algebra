@@ -67,6 +67,20 @@ Sirve de trazabilidad del proyecto y de evidencia de criterio (TFM).
 **Decisión**: (c). En origen, las listas de valores usan `\quad` como separador (sin coma). Como red de seguridad, `MathView.sanitized(_:)` elimina por regex la coma pegada a un signo (`, \pm|\mp|-|+|\cdot|\times|\div`) antes de pasar el LaTeX a SwiftMath.
 **Motivo**: no se edita una dependencia remota; el saneado central corta el problema de raíz para fórmulas actuales y futuras sin ensuciar cada mapper. Ver memoria del proyecto (gotchas de SwiftMath).
 
+### ADR-009 · Generación de ejercicios construyendo desde la solución
+**Estado**: ✅ Aceptada
+**Contexto**: la Práctica y la hoja PDF necesitan ejercicios ilimitados, pero deben tener **solución garantizada y limpia** (enteras, fraccionarias o con raíz doble), no polinomios al azar que salgan irracionales, sin raíces racionales o con números enormes.
+**Opciones**: (a) sortear coeficientes y resolver a posteriori (muchos descartes, soluciones «feas» o sin raíces racionales); (b) construir el ejercicio **desde la solución**.
+**Decisión**: (b). En ecuaciones se parte de raíces (enteras o fraccionarias), se **expanden los factores** `(aᵢx+bᵢ)` a coeficientes enteros y se multiplica por un **coeficiente líder** `a` variable; se permiten **raíces dobles** y bicuadradas `±k`; un `build` acota los coeficientes con un tope. En sistemas se elige `A` con det≠0 y, o bien término independiente libre → **solución fraccionaria** por Cramer, o bien `b = A·solución entera`. La solución se guarda en `Fraction` (exacta) junto al `input`, y la autocorrección compara contra ella (`init?(parsing:)` para leer «3/2», `Hashable` para comparar por conjunto). El azar entra por un **`RandomSource` inyectable** (`SystemRandomSource` en producción; doble determinista en tests).
+**Motivo**: garantiza ejercicios resolubles y didácticos sin bucles de reintento costosos; reutiliza los solvers/mappers existentes para el enunciado y los pasos; el `RandomSource` tras protocolo mantiene la lógica testeable de forma determinista (Clean).
+
+### ADR-010 · Exportación a PDF (UIGraphicsPDFRenderer) + previsualización con PDFKit
+**Estado**: ✅ Aceptada
+**Contexto**: la hoja imprimible debe salir como **PDF** con las fórmulas bien tipografiadas, poder **previsualizarse** dentro de la app y **compartirse/imprimirse**. `MathView` (`MTMathUILabel`) pinta en pantalla, no genera un documento paginado.
+**Opciones**: (a) HTML→PDF vía `WKWebView` (WebView, MathJax/KaTeX, pesado); (b) capturar vistas SwiftUI a imagen (`ImageRenderer`) y componerlas; (c) dibujar el PDF con `UIGraphicsPDFRenderer` y **rasterizar cada fórmula** con SwiftMath (`MTMathImage`).
+**Decisión**: (c). `SwiftMathWorksheetPDFRenderer` (`@MainActor`) compone páginas **A4** con `UIGraphicsPDFRenderer` (título, nombre/fecha, enunciados numerados y **página de soluciones**, paginando cuando no cabe) y dibuja las fórmulas como imagen con `MTMathImage`. La vista previa in-app es `PDFKitView` (`UIViewRepresentable` sobre `PDFView`); se comparte/imprime con `ShareLink` (y hay un `ShareSheet` genérico disponible).
+**Motivo**: nativo y sin WebView; reutiliza el mismo motor de fórmulas (SwiftMath) que el resto de la app, garantizando coherencia tipográfica; PDFKit da previsualización, zoom, compartir e imprimir gratis.
+
 ---
 
 ## Plantilla

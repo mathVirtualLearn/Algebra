@@ -31,6 +31,10 @@ struct HomeView: View {
                         SystemsFactory.make()
                     case "functions":
                         FunctionsFactory.make()
+                    case "practice":
+                        PracticeFactory.make()
+                    case "worksheet":
+                        WorksheetFactory.make()
                     default:
                         ExpressionsFactory.make(topicId: route.id, title: route.title)
                     }

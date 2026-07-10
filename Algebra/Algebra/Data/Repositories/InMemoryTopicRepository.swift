@@ -25,6 +25,18 @@ struct InMemoryTopicRepository: TopicRepository {
                 subtitle: "Representa gráficas",
                 systemImage: "chart.xyaxis.line"
             ),
+            Topic(
+                id: "practice",
+                title: "Práctica",
+                subtitle: "Genera ejercicios y comprueba",
+                systemImage: "pencil.and.list.clipboard"
+            ),
+            Topic(
+                id: "worksheet",
+                title: "Generar ejercicios",
+                subtitle: "10 ejercicios en PDF con soluciones",
+                systemImage: "doc.badge.plus"
+            ),
         ]
     }
 }

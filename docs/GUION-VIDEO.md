@@ -14,7 +14,7 @@
 ## [0:00–0:20] · Introducción
 **Pantalla:** portada o la pestaña **Aprende** (panel de temas).
 **Voz:** «Esta es *Álgebra*, una app iOS nativa para estudiar álgebra de bachillerato. Es mi TFM del
-Máster de Desarrollo con IA y está construida íntegramente con IA, con Claude Code. No solo resuelve
+Máster de Desarrollo con IA y está construida usando la IA como copiloto. No solo resuelve
 ejercicios: **explica cada paso**. Vamos a verla.»
 
 ## [0:20–1:10] · Ecuaciones (lo más potente)
