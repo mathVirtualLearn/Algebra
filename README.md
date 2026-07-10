@@ -6,7 +6,7 @@
 
 ![iOS](https://img.shields.io/badge/iOS-26.1-black?logo=apple)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-Observation-blue)
-![Tests](https://img.shields.io/badge/Swift%20Testing-169%20tests-brightgreen)
+![Tests](https://img.shields.io/badge/Swift%20Testing-217%20tests-brightgreen)
 ![Arquitectura](https://img.shields.io/badge/Arquitectura-MVVM%20%2B%20Clean-orange)
 
 ---
@@ -45,7 +45,7 @@ tipografía TeX.
 
 - **Ecuaciones** de grado 1 a 4 y **bicuadradas**: 1.º/2.º por fórmula, 3.º/4.º por **Ruffini** (con la
   *caja de división sintética* dibujada), bicuadradas por **cambio de variable** `t = x²`. Explicación
-  paso a paso y solución destacada.
+  paso a paso y solución destacada, con las raíces no enteras mostradas como **fracción exacta**.
 - **Sistemas lineales 2×2 y 3×3**, con **métodos según el tamaño**: sustitución / igualación / reducción
   (2 ecuaciones) y **Cramer / Gauss** (3 ecuaciones). Soluciones en **fracciones exactas**; los casos
   compatibles indeterminados se resuelven en **forma paramétrica** (en función de `t`).
@@ -53,7 +53,13 @@ tipografía TeX.
   desarrollo agrupado (`(5x − 4r)² = 25x² − 40rx + 16r²`).
 - **Funciones**: **entrada de texto libre** con un *parser* propio (descenso recursivo, multiplicación
   implícita) que interpreta `2cos(3x)`, `x^2+3x`, `e^x`… y dibuja la gráfica con **Swift Charts**.
-- **Teoría**: 8 artículos con contenido real (ecuaciones, Ruffini, sistemas, Cramer, Gauss).
+- **Práctica**: la app **genera ejercicios y autocorrige**. Ejercicios con **solución garantizada**
+  (construida desde la solución) de ecuaciones de grado 1–4, bicuadradas y sistemas 2×2/3×3; escribes la
+  respuesta, la app la comprueba (verde/rojo) y puedes ver la solución paso a paso.
+- **Generar hoja**: crea **10 ejercicios del tipo elegido en un PDF imprimible** con **página de
+  soluciones**, con **vista previa** in-app (PDFKit) y opción de compartir/imprimir.
+- **Teoría**: 8 artículos con contenido real (ecuaciones, Ruffini —con su *caja* de división sintética—,
+  sistemas, Cramer, Gauss).
 - **Render de fórmulas** tipo libro (LaTeX) con **SwiftMath**, con autoajuste al ancho (sin scroll).
 - **Ajustes** persistentes: **tamaño de fórmulas** (con vista previa en vivo) y **mostrar/ocultar los
   pasos** detallados.
@@ -121,7 +127,7 @@ credenciales de prueba**.
 
 ## Tests
 
-La lógica de Domain y Presentation está cubierta con **Swift Testing** (169 pruebas, patrón
+La lógica de Domain y Presentation está cubierta con **Swift Testing** (217 pruebas, patrón
 *Given-When-Then*). Para ejecutarlas:
 
 ```bash

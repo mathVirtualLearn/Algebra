@@ -1,6 +1,6 @@
 import Foundation
 
-struct Fraction: Equatable, Sendable {
+struct Fraction: Equatable, Hashable, Sendable {
     let numerator: Int
     let denominator: Int
 
@@ -25,6 +25,23 @@ struct Fraction: Equatable, Sendable {
     init(_ n: Int) {
         numerator = n
         denominator = 1
+    }
+
+    init?(parsing text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return nil }
+        let parts = trimmed.split(separator: "/", omittingEmptySubsequences: false)
+        if parts.count == 1 {
+            guard let n = Int(parts[0].trimmingCharacters(in: .whitespaces)) else { return nil }
+            self = Fraction(n)
+        } else if parts.count == 2 {
+            guard let n = Int(parts[0].trimmingCharacters(in: .whitespaces)),
+                  let d = Int(parts[1].trimmingCharacters(in: .whitespaces)),
+                  d != 0 else { return nil }
+            self = Fraction(n, d)
+        } else {
+            return nil
+        }
     }
 
     // Aproxima un Double por una fracción mediante el desarrollo en fracción continua (convergentes).
