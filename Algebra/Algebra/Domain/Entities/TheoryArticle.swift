@@ -10,4 +10,5 @@ enum TheoryBlock: Equatable, Sendable {
     case paragraph(String)
     case formula(String)
     case bullet([String])
+    case ruffini(header: [String], root: String, products: [String], results: [String])
 }
