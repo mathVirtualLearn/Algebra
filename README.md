@@ -40,6 +40,8 @@ tipografía TeX.
 | <img src="docs/screenshots/aprende.png" width="240"> | <img src="docs/screenshots/ecuaciones.png" width="240"> | <img src="docs/screenshots/sistemas.png" width="240"> |
 | **Funciones** | **Teoría** | **Ajustes** |
 | <img src="docs/screenshots/funciones.png" width="240"> | <img src="docs/screenshots/teoria.png" width="240"> | <img src="docs/screenshots/ajustes.png" width="240"> |
+| **Práctica (autocorrección)** | **Generar ejercicios (PDF)** | |
+| <img src="docs/screenshots/practica.png" width="240"> | <img src="docs/screenshots/generar.png" width="240"> | |
 
 ## Funcionalidades
 
