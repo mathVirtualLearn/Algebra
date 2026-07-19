@@ -8,11 +8,13 @@
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-Observation-blue)
 ![Tests](https://img.shields.io/badge/Swift%20Testing-217%20tests-brightgreen)
 ![Arquitectura](https://img.shields.io/badge/Arquitectura-MVVM%20%2B%20Clean-orange)
+[![TestFlight](https://img.shields.io/badge/TestFlight-Beta%20pública-0D96F6?logo=apple)](https://testflight.apple.com/join/YTw5N5qg)
 
 ---
 
 ## Índice
 - [Qué es](#qué-es)
+- [Demo y beta pública](#demo-y-beta-pública)
 - [Capturas](#capturas)
 - [Funcionalidades](#funcionalidades)
 - [Stack técnico](#stack-técnico)
@@ -32,6 +34,16 @@ estudiante de bachillerato **compruebe sus ejercicios y entienda el porqué de c
 a dar el resultado: reproduce el procedimiento humano (distribuir, agrupar, despejar, sustituir…) con
 frases en lenguaje natural intercaladas con los cálculos, y renderiza toda la notación matemática con
 tipografía TeX.
+
+## Demo y beta pública
+
+- **Beta pública (TestFlight):** pruébala en tu iPhone (iOS 26.1) desde
+  **[testflight.apple.com/join/YTw5N5qg](https://testflight.apple.com/join/YTw5N5qg)** — requiere tener
+  instalada la app **TestFlight**.
+- **Demo en vídeo:** [ver en Google Drive](https://drive.google.com/file/d/1BbZWt2gtC8HirFzRr1MxTIzdw--FgtN1/view?usp=drive_link)
+  — recorrido por la arquitectura, el proceso de desarrollo con IA y la app funcionando (guion en
+  [`docs/guion-video-explicativo.md`](docs/guion-video-explicativo.md)).
+- **Slides de la presentación:** [ver en Google Drive](https://drive.google.com/file/d/1nwVXw2DtK01tmZaBJkNsFNcDwgB4QSK9/view?usp=drive_link).
 
 ## Capturas
 

@@ -1,6 +1,6 @@
 import Foundation
 
-final class UserDefaultsPreferencesRepository: PreferencesRepository {
+final class UserDefaultsPreferencesRepository: PreferencesRepository, @unchecked Sendable {
     private let defaults: UserDefaults
 
     private enum Key {
